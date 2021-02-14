@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TopScore : MonoBehaviour {
 
-    public Text Label;
+    [SerializeField]
+    private TextMeshProUGUI topScoreLabel;
 
     private void Awake() {
-        Label.text += Results.instance.topScore.ToString();
+        topScoreLabel.text = "Top score: " + Results.instance.topScore;
     }
+
 }
