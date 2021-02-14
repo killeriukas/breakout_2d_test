@@ -203,7 +203,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1779093947323320, guid: d400bdafc6a9441c5adbf2154bc24191, type: 3}
       propertyPath: m_Name
-      value: Brik (3)
+      value: Brick (3)
       objectReference: {fileID: 0}
     - target: {fileID: 4642627781157872, guid: d400bdafc6a9441c5adbf2154bc24191, type: 3}
       propertyPath: m_RootOrder
@@ -460,7 +460,7 @@ GameObject:
   m_Component:
   - component: {fileID: 542324677}
   m_Layer: 0
-  m_Name: Briks
+  m_Name: Bricks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -493,7 +493,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1779093947323320, guid: d400bdafc6a9441c5adbf2154bc24191, type: 3}
       propertyPath: m_Name
-      value: Brik (1)
+      value: Brick (1)
       objectReference: {fileID: 0}
     - target: {fileID: 4642627781157872, guid: d400bdafc6a9441c5adbf2154bc24191, type: 3}
       propertyPath: m_RootOrder
@@ -848,7 +848,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1779093947323320, guid: d400bdafc6a9441c5adbf2154bc24191, type: 3}
       propertyPath: m_Name
-      value: Brik (2)
+      value: Brick (2)
       objectReference: {fileID: 0}
     - target: {fileID: 4642627781157872, guid: d400bdafc6a9441c5adbf2154bc24191, type: 3}
       propertyPath: m_RootOrder
