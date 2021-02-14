@@ -1,20 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class BallController : MonoBehaviour
-{
-    public float Speed = 1f;
-    
-    public void Kick()
-    {
-        var rb = GetComponent < Rigidbody2D>();
-        rb.velocity = Random.insideUnitCircle * Speed;
+public class BallController : MonoBehaviour {
+
+    [SerializeField]
+    private float velocity;
+
+    [SerializeField]
+    private Rigidbody2D _rigidBody2D;
+
+    public void Kick() {
+        Vector2 moveDirection = Random.insideUnitCircle.normalized;
+        _rigidBody2D.velocity = moveDirection * velocity;
     }
 
-    private void Update()
-    {
-        var rb = GetComponent < Rigidbody2D>();
-        rb.velocity = rb.velocity.normalized * Speed;
+	public void Default() {
+        _rigidBody2D.velocity = Vector2.zero;
+        _rigidBody2D.MovePosition(Vector2.zero);
     }
+
 }
