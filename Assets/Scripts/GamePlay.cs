@@ -1,110 +1,108 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-public class GamePlay : MonoBehaviour
-{
-    private static GamePlay _instance;
-    public static GamePlay Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                var go = new GameObject("GamePlay");
-                _instance = go.AddComponent<GamePlay>();
-            }
+public class GamePlay : MonoBehaviour {
 
-            return _instance;
-        }
-    }
+    public static GamePlay instance { get; private set; }
     
-    public BallController Ball;
-    public PlayerController Player;
+    [SerializeField]
+    private BallController ball;
 
-    public Text ScoreLabel;
-    public Text LivesLabel;
-    public Text GetReadyLabel;
+    [SerializeField]
+    private PlayerController player;
 
-    public uint Score = 0;
-    public uint Lives = 3;
+    [SerializeField]
+    private uint MaxLives = 3;
 
-    uint Briks = 4;
-    private bool _gameOver = false;
+    [SerializeField]
+    private TextMeshProUGUI scoreLabel;
 
-    private void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        
-        Reset();
+    [SerializeField]
+    private TextMeshProUGUI livesLabel;
+
+    [SerializeField]
+    private TextMeshProUGUI getReadyLabel;
+
+    private uint currentLives;
+    private uint currentScore;
+
+    private const uint MaxBricks = 4;
+
+    public void MarkAsScored() {
+        ++currentScore;
+        scoreLabel.text = "Score: " + currentScore;
     }
 
-    public void Goal()
-    {
-        GetReadyLabel.enabled = true;
-        var pos1 = Player.transform.position;
-        pos1.x = 0f;
-        Player.transform.position = pos1;
+    public void MarkAsDied() {
+        --currentLives;
+        livesLabel.text = "Lives: " + currentLives;
+    }
 
-        Ball.transform.position = Vector3.zero;
-        Ball.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+    private void Awake() {
+        instance = this;
 
-        ScoreLabel.text = GamePlay.Instance.Score.ToString();
-        LivesLabel.text = GamePlay.Instance.Lives.ToString();
+        Default();
+        RefreshLabels();
+    }
+
+	private void Start() {
+        Restart();
+    }
+
+    public bool HasEnoughLives => currentLives > 0;
+
+    public void Restart() {
+        Debug.Assert(HasEnoughLives, "Not enough lives to restart the game! Check HasEnoughLives() before calling Restart().");
+
+        player.Default();
+        ball.Default();
 
         StartCoroutine(StartGame());
     }
 
-    private void Reset()
-    {
-        Score = 0;
-        Lives = 3;
-        Briks = 4;
-
-        Goal();
+    private void RefreshLabels() {
+        scoreLabel.text = "Score: " + currentScore;
+        livesLabel.text = "Lives: " + currentLives;
     }
 
-    private IEnumerator StartGame()
-    {
+    private void Default() {
+        currentScore = 0;
+        currentLives = MaxLives;
+    }
+
+    private IEnumerator StartGame() {
+        getReadyLabel.enabled = true;
+
         yield return new WaitForSeconds(3f);
 
-        GetReadyLabel.enabled = false;
-        _gameOver = false;
-        Ball.Kick();
+        getReadyLabel.enabled = false;
+        
+        ball.Kick();
     }
 
-    private void Update()
-    {
-#if true //debug commands
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Lives = 0;
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            Score = Briks;
+    private void Update() {
+
+#if false //debug commands
+        if(Input.GetKeyDown(KeyCode.Q)) {
+            currentLives = 0;
+        } else if(Input.GetKeyDown(KeyCode.W)) {
+            currentScore = MaxBricks;
         }
 #endif
 
-        if (_gameOver) return;
-
-        ScoreLabel.text = GamePlay.Instance.Score.ToString();
-        LivesLabel.text = GamePlay.Instance.Lives.ToString();
-
-        if (Score == Briks)
-        {
+        if(currentScore == MaxBricks) {
             SceneManager.LoadScene("Win");
-            _gameOver = true;
-        }
-        else if (Lives == 0)
-        {
+        } else if(currentLives == 0) {
+            Results.instance.topScore = currentScore;
             SceneManager.LoadScene("Lose");
-            _gameOver = true;
         }
+
     }
+
+    private void OnDestroy() {
+        instance = null;
+    }
+
 }
