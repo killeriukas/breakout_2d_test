@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TopScore : MonoBehaviour
-{
+public class TopScore : MonoBehaviour {
+
     public Text Label;
-    
-    private void Awake()
-    {
-        var n = GamePlay.Instance.Score;
-        Label.text += n.ToString();
+
+    private void Awake() {
+        Label.text += Results.instance.topScore.ToString();
     }
 }
