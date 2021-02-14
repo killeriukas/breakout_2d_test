@@ -30,14 +30,20 @@ public class GamePlay : MonoBehaviour {
 
     private const uint MaxBricks = 4;
 
+    public bool HasEnoughLives => currentLives > 0;
+
     public void MarkAsScored() {
         ++currentScore;
         scoreLabel.text = "Score: " + currentScore;
+
+        CheckWinCondition();
     }
 
     public void MarkAsDied() {
         --currentLives;
         livesLabel.text = "Lives: " + currentLives;
+
+        CheckLoseCondition();
     }
 
     private void Awake() {
@@ -50,8 +56,6 @@ public class GamePlay : MonoBehaviour {
 	private void Start() {
         Restart();
     }
-
-    public bool HasEnoughLives => currentLives > 0;
 
     public void Restart() {
         Debug.Assert(HasEnoughLives, "Not enough lives to restart the game! Check HasEnoughLives() before calling Restart().");
@@ -82,24 +86,35 @@ public class GamePlay : MonoBehaviour {
         ball.Kick();
     }
 
-    private void Update() {
-
-#if false //debug commands
-        if(Input.GetKeyDown(KeyCode.Q)) {
-            currentLives = 0;
-        } else if(Input.GetKeyDown(KeyCode.W)) {
-            currentScore = MaxBricks;
-        }
-#endif
-
+    private void CheckWinCondition() {
         if(currentScore == MaxBricks) {
             SceneManager.LoadScene("Win");
-        } else if(currentLives == 0) {
+        }
+    }
+
+    private void CheckLoseCondition() {
+        if(0 == currentLives) {
             Results.instance.topScore = currentScore;
             SceneManager.LoadScene("Lose");
         }
+    }
+
+#if true //debug commands
+
+    private void Update() {
+
+
+        if(Input.GetKeyDown(KeyCode.Q)) {
+            currentLives = 0;
+            CheckLoseCondition();
+        } else if(Input.GetKeyDown(KeyCode.W)) {
+            currentScore = MaxBricks;
+            CheckWinCondition();
+        }
 
     }
+
+#endif
 
     private void OnDestroy() {
         instance = null;
